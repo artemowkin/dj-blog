@@ -1,0 +1,33 @@
+{% for post in posts %}
+    <div class="mb-5">
+    {% if LANGUAGE_CODE == 'ru' %}
+        {% if post.title_ru %}
+            <h1><a href="{% url 'category_posts' post.category.pk %}">{{ post.title_ru }}</a></h1>
+        {% else %}
+            <h1><a href="{% url 'category_posts' post.category.pk %}">{{ post.title }}</a></h1>
+        {% endif %}
+
+        {% if post.body_ru %}
+            <p>{{ post.body_ru|truncatewords:15 }}</p>
+        {% else %}
+            <p>{{ post.body|truncatewords:15 }}</p>
+        {% endif %}
+
+        {% if post.category.title_ru %}
+            <p>Категория: <a href="{% url 'category_posts' post.category.pk %}">{{ post.category.title_ru }}</a></p>
+        {% else %}
+            <p>Категория: <a href="{% url 'category_posts' post.category.pk %}">{{ post.category.title }}</a></p>
+        {% endif %}
+    {% else %}
+        <h1><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h1>
+        <p>{{ post.body|truncatewords:15 }}</p>
+        <p>Category: <a href="{% url 'category_posts' post.category.pk %}">{{ post.category.title }}</a></p>
+    {% endif %}
+    </div>
+{% empty %}
+    {% if LANGUAGE_CODE == 'ru' %}
+        <p>Постов нет :(</p>
+    {% else %}
+        <p>There are no posts :(</p>
+    {% endif %}
+{% endfor %}

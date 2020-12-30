@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+
+{% block title %}All Posts | Blog{% endblock %}
+
+{% block content %}
+{% include 'posts/posts_list.html' with posts=posts %}
+{% endblock %}

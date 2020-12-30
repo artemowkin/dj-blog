@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+
+{% block title %}{{ post.title }} | Blog{% endblock %}
+
+{% block content %}
+{% if LANGUAGE_CODE == 'ru' %}
+    {% if post.title_ru %}
+        <h1>{{ post.title_ru }}</h1>
+    {% else %}
+        <h1>{{ post.title }}</h1>
+    {% endif %}
+
+    <p><small>автор: <b>{{ post.author.username }}</b> ({{ post.pub_date }})</small></p>
+
+    {% if post.body_ru %}
+        <p>{{ post.body_ru|safe }}</p>
+    {% else %}
+        <p>{{ post.body|safe }}</p>
+    {% endif %}
+
+    {% if post.category.title_ru %}
+        <p>Категория: <a href="{% url 'category_posts' post.category.pk %}">{{ post.category.title_ru }}</a></p>
+    {% else %}
+        <p>Категория: <a href="{% url 'category_posts' post.category.pk %}">{{ post.category.title }}</a></p>
+    {% endif %}
+{% else %}
+    <h1>{{ post.title }}</h1>
+    <p><small>author: <b>{{ post.author.username }}</b> ({{ post.pub_date }})</small></p>
+    <p>{{ post.body|safe }}</p>
+    <p>Category: <a href="{% url 'category_posts' post.category.pk %}">{{ post.category.title }}</a></p>
+{% endif %}
+{% if user.is_staff %}
+    <a class="btn btn-primary" href="{% url 'change_post' post.pk %}">{% translate "Change" %}</a>
+    <a class="btn btn-danger" href="{% url 'delete_post' post.pk %}">{% translate "Delete" %}</a>
+{% endif %}
+{% endblock %}

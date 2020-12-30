@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+
+{% block title %}{{ category.title }} | Blog{% endblock %}
+
+{% block content %}
+{% if LANGUAGE_CODE == 'ru' %}
+    <p class="mb-3">Категория "{{ category.title_ru }}"</p>
+{% else %}
+    <p class="mb-3">Category "{{ category.title }}"</p>
+{% endif %}
+{% include 'posts/posts_list.html' with posts=posts%}
+{% endblock %}

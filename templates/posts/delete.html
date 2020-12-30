@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+{% block title %}Delete "{{ post.title }}"{% endblock %}
+
+{% block content %}
+<h1 class="mb-3">{% blocktranslate with title=post.title %}Delete post "{{ title }}"?{% endblocktranslate %}</h1>
+
+<form method="POST">
+    {% csrf_token %}
+    <p>{% blocktranslate with title=post.title %}Do you really want to delete post "{{ title }}"?{% endblocktranslate %}</p>
+    <input class="mt-3 btn btn-danger" type="submit" value="Delete">
+</form>
+{% endblock %}

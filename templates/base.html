@@ -1,0 +1,71 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}{% endblock %}</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+        <style>
+            a {
+                text-decoration: none;
+            }
+        </style>
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="{% url 'all_posts' %}">MyBlog</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="{% url 'all_posts' %}">{% translate "Homepage" %}</a>
+                        </li>
+                        {% if user.is_staff %}
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="{% url 'create_post' %}">{% translate "Create Post" %}</a>
+                            </li>
+                        {% endif %}
+                        {% get_current_language as LANGUAGE_CODE %}
+                        {% csrf_token %}
+                        {% if LANGUAGE_CODE == 'ru' %}
+                            <li><a class="nav-link active language" href="#">en</a></li>
+                            <li><a class="nav-link disabled language" href="#">ru</a></li>
+                        {% else %}
+                            <li><a class="nav-link disabled language" href="#">en</a></li>
+                            <li><a class="nav-link active language" href="#">ru</a></li>
+                        {% endif %}
+                        <script>
+                            let langButton = document.querySelector('a.language.active');
+                            let csrfToken = document.getElementsByName('csrfmiddlewaretoken')[0].getAttribute('value');
+                            let url = '/i18n/setlang/';
+
+                            let lang = langButton.innerHTML;
+                            langButton.onclick = function() {
+                                fetch(url, {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json;charset=utf-8',
+                                        'X-CSRFToken': csrfToken,
+                                    },
+                                    body: JSON.stringify({'language': lang}),
+                                }).then(response => document.location.reload())
+                            };
+                        </script>
+                    </ul>
+                    <form class="d-flex" action="{% url 'search_posts' %}" method="GET">
+                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="query">
+                        <button class="btn btn-outline-success" type="submit">{% translate "Search" %}</button>
+                    </form>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container mt-5 mb-5">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </body>
+</html>

@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+
+{% block title %}Search results for "{{ query }}" | Blog{% endblock %}
+
+{% block content %}
+{% if LANGUAGE_CODE == 'ru' %}
+    <p class="mb-3">Результаты поиска по запросу "{{ query }}":</p>
+{% else %}
+    <p class="mb-3">Search results for "{{ query }}":</p>
+{% endif %}
+{% include 'posts/posts_list.html' with posts=posts %}
+{% endblock %}
